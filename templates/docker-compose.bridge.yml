@@ -1,0 +1,22 @@
+# Add this service to the docker-compose.yml that runs the Hermes agent.
+# Adjust build context and volume paths to your layout.
+
+services:
+  webchat-bridge:
+    build:
+      context: ./bridge
+      dockerfile: Dockerfile
+    image: hermes-webchat-bridge:latest
+    container_name: hermes-webchat-bridge
+    restart: unless-stopped
+    env_file:
+      - ./bridge/.env
+    volumes:
+      - ./hermes-data:/opt/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - hermes
+    mem_limit: 256m
+    security_opt:
+      - no-new-privileges:true
